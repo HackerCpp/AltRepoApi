@@ -9,12 +9,11 @@
 namespace altrepoapi{
     class ALTREPOAPI_EXPORT AltRepoApi
     {
-        size_t m_currentId = 0;
+        size_t m_currentId = 1;
         JsonHttpLoader m_jsonLoader;
         std::map<size_t, std::function<void(BinaryPackages)>> m_binaryPackagesRequests;
-        std::function<void(char *, size_t)> m_callback;
 
-        void binaryPackagesHandler(size_t id, char *data, size_t size);
+        void binaryPackagesHandler(const size_t id, char *data, size_t size);
     public:
         enum Repos{P9,P10,SISYPHUS};
 

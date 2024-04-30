@@ -15,12 +15,14 @@ void operator << (altrepoapi::BinaryPackages &bp, QByteArray json){
          altrepoapi::BinaryPackages::PackageInfo pi;
          QJsonObject binary = dat.at(num).toObject();
          pi.name = binary.value("name").toString().toStdString();
+         pi.epoch = binary.value("epoch").toInt();
+         pi.version = binary.value("version").toString().toStdString();
+         pi.release = binary.value("release").toString().toStdString();
+         pi.arch = binary.value("arch").toString().toStdString();
+         pi.disttag = binary.value("disttag").toString().toStdString();
+         pi.buildTime = binary.value("buildTime").toInt();
+         pi.source = binary.value("source").toString().toStdString();
          bp << pi;
-         //ui->textEdit->append(binary.value("version").toString());
-         //ui->textEdit->append(binary.value("release").toString());
-         //ui->textEdit->append(binary.value("arch").toString());
-         //ui->textEdit->append(binary.value("disttag").toString());
-         //ui->textEdit->append("\n");
     }
 }
 
@@ -29,6 +31,16 @@ altrepoapi::BinaryPackages::
 BinaryPackages(char * jsonData, size_t size){
     *this << QByteArray::fromRawData(jsonData,size);
 }
+
+const altrepoapi::BinaryPackages::PackageInfo &altrepoapi::BinaryPackages::
+at(size_t index)const{
+    try{
+        return m_packages.at(index);
+    }catch(std::out_of_range exe){
+        throw exe;
+    }
+}
+
 
 void altrepoapi::BinaryPackages::
 operator << (PackageInfo pi){

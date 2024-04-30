@@ -10,6 +10,7 @@ namespace altrepoapi{
 
         QNetworkAccessManager *m_mng;
         QNetworkRequest *m_request;
+        std::function<void(char * data, size_t size)> m_callback = nullptr;
     public:
         JsonHttpLoader();
         ~JsonHttpLoader();

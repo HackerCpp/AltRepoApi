@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 
 add_library(AltRepoApi SHARED
   AltRepoApi_global.h
@@ -22,6 +22,8 @@ add_library(AltRepoApi SHARED
   jsonhttploader.cpp
 )
 
-target_link_libraries(AltRepoApi PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(AltRepoApi
+    PRIVATE Qt${QT_VERSION_MAJOR}::Network
+)
 
 target_compile_definitions(AltRepoApi PRIVATE ALTREPOAPI_LIBRARY)

@@ -3,7 +3,7 @@
 
 #include "AltRepoApi_global.h"
 #include <string>
-#include <list>
+#include <vector>
 
 namespace altrepoapi{
     class ALTREPOAPI_EXPORT BinaryPackages
@@ -26,10 +26,11 @@ namespace altrepoapi{
         void operator << (PackageInfo pi);
 
         size_t size()const{return m_packages.size();}
+        const PackageInfo &at(size_t index)const;
 
     private:
 
-        std::list<altrepoapi::BinaryPackages::PackageInfo> m_packages;
+        std::vector<altrepoapi::BinaryPackages::PackageInfo> m_packages;
     };
 }
 #endif // BINARYPACKAGES_H

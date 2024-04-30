@@ -6,10 +6,15 @@ AltRepoApi::AltRepoApi()
 }
 
 void altrepoapi::AltRepoApi::
-binaryPackagesHandler(size_t id, char *data, size_t size){
-   auto func  = m_binaryPackagesRequests.at(id);
-   func(BinaryPackages{data, size});
-   m_binaryPackagesRequests.erase(id);
+binaryPackagesHandler(const size_t id, char *data, size_t size){
+    try{
+        auto func  = m_binaryPackagesRequests.at(id);
+        func(BinaryPackages{data, size});
+        m_binaryPackagesRequests.erase(id);
+
+    }catch(...){
+
+    }
 }
 
 void altrepoapi::AltRepoApi::
@@ -20,8 +25,9 @@ exportBinaryPackages_async(Repos branch,std::function<void(BinaryPackages)> call
             exe(std::string{"ERROR : please try again later"});
         return;
     }
-    size_t id = ++m_currentId;
-    m_binaryPackagesRequests.insert({id, callback});
+    ++m_currentId;
+    m_binaryPackagesRequests.insert(std::make_pair(m_currentId, callback));
     std::string url = "https://rdb.altlinux.org/api/export/branch_binary_packages/" + m_repos.at(branch);
-    m_jsonLoader.load_async(url, std::bind(&altrepoapi::AltRepoApi::binaryPackagesHandler,this,id,std::placeholders::_1,std::placeholders::_2));
+    auto f = std::bind(&altrepoapi::AltRepoApi::binaryPackagesHandler,this,m_currentId,std::placeholders::_1,std::placeholders::_2);
+    m_jsonLoader.load_async(url, f);
 }
