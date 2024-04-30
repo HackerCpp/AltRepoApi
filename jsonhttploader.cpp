@@ -12,8 +12,9 @@ JsonHttpLoader(){
 
     QObject::connect(m_mng, &QNetworkAccessManager::finished,[&](QNetworkReply * reply){
         QByteArray data = reply->readAll();
-        if(m_callback)
-            m_callback(data.data(),data.size());
+        auto func  = m_requests.at(reinterpret_cast<size_t>(reply));
+        func(data.data(),data.size());
+        m_requests.erase(reinterpret_cast<size_t>(reply));
     });
 }
 
@@ -32,6 +33,5 @@ altrepoapi::JsonHttpLoader::
 void altrepoapi::JsonHttpLoader::
 load_async(std::string url, std::function<void(char * data, size_t size)> callback){
     m_request->setUrl(QUrl{QString::fromStdString(url)});
-    m_mng->get(*m_request);
-    m_callback = callback;
+    m_requests.insert(std::make_pair(reinterpret_cast<size_t>(m_mng->get(*m_request)), callback));
 }

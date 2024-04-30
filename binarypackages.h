@@ -28,6 +28,10 @@ namespace altrepoapi{
         size_t size()const{return m_packages.size();}
         const PackageInfo &at(size_t index)const;
 
+        auto vector()const
+        -> const std::vector<altrepoapi::BinaryPackages::PackageInfo>&
+        {return m_packages;}
+
     private:
 
         std::vector<altrepoapi::BinaryPackages::PackageInfo> m_packages;
